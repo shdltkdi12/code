@@ -1,29 +1,36 @@
 class TextEditor:
 
     def __init__(self):
-        self.editor = []
-        self.index =0
+        self.left_stack = []
+        self.right_stack = []
 
     def addText(self, text: str) -> None:
-        for i in range(len(text)-1, -1, -1):
-            self.editor.insert(self.index, text[i])
-        self.index += len(text)
+        for char in text:
+            self.left_stack.append(char)
 
     def deleteText(self, k: int) -> int:
-        new_index = max(0, self.index - k)
-        self.editor = self.editor[0:new_index] + self.editor[self.index:]
-        ans = self.index if new_index == 0 else k
-        self.index = new_index
+        ans = min(k, len(self.left_stack))
+        for i in range(min(k, len(self.left_stack))):
+            self.left_stack.pop()
         return ans
 
     def cursorLeft(self, k: int) -> str:
-        self.index = max(0, self.index - k)
-        return ''.join(self.editor[max(0, self.index-10):self.index])
+        for i in range(min(k, len(self.right_stack))):
+            self.left_stack.append(self.right_stack.pop())
+
+        output = []        
+        for i in range(max(0, len(self.left_stack)-11), len(self.left_stack)):
+            output.append(self.left_stack[i])
+        return ''.join(output)
 
     def cursorRight(self, k: int) -> str:
-        self.index = min(len(self.editor), self.index + k)
-        return ''.join(self.editor[max(0, self.index-10):self.index])
+        for i in range(min(k, len(self.right_stack))):
+            self.right_stack.append(self.left_stack.pop())
 
+        output = []        
+        for i in range(max(0, len(self.left_stack)-11), len(self.left_stack)):
+            output.append(self.left_stack[i])
+        return ''.join(output)
 
 # Your TextEditor object will be instantiated and called as such:
 # obj = TextEditor()
