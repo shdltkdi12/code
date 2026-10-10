@@ -3,7 +3,14 @@ class Solution:
         girl_dic = defaultdict(lambda:-1)
         m = len(grid)
         n = len(grid[0])
-        indexes = [0 for _ in range(m)]
+        for i in range(m):
+            new = []
+            for j in range(n):
+                if grid[i][j] == 1:
+                    new.append(j)
+            grid[i] = new
+        # print(grid)
+        
         count = 0
 
         def f(boy):
@@ -20,7 +27,5 @@ class Solution:
         for boy in range(m):
             if f(boy):
                 count +=1
-        return count
-
-                    
+        return count      
 
